@@ -40,6 +40,47 @@ class ServiceRequestController extends Controller
         return back()->with('success', 'Request submitted successfully');
     }
 
+    public function edit(Request $request, ServiceRequest $serviceRequest)
+    {
+        $this->authorizeClientOwnership($request, $serviceRequest);
+
+        $categories = ServiceCategory::orderBy('name')->get();
+
+        return view('backend.requests.edit', compact('serviceRequest', 'categories'));
+    }
+
+    public function update(Request $request, ServiceRequest $serviceRequest)
+    {
+        $this->authorizeClientOwnership($request, $serviceRequest);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'category' => 'required|string|exists:service_categories,name|max:100',
+            'location' => 'nullable|string|max:255',
+            'priority' => 'required|in:low,medium,high',
+        ]);
+
+        $serviceRequest->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,
+            'location' => $request->location,
+            'priority' => $request->priority,
+        ]);
+
+        return redirect()->route('requests.index')->with('success', 'Request updated successfully');
+    }
+
+    public function destroy(Request $request, ServiceRequest $serviceRequest)
+    {
+        $this->authorizeClientOwnership($request, $serviceRequest);
+
+        $serviceRequest->delete();
+
+        return redirect()->route('requests.index')->with('success', 'Request deleted successfully');
+    }
+
     public function index(Request $request)
     {
         $requests = ServiceRequest::with(['assignedStaff', 'updates.updatedBy'])
@@ -263,5 +304,17 @@ class ServiceRequestController extends Controller
         }
 
         return 'pending';
+    }
+
+    protected function authorizeClientOwnership(Request $request, ServiceRequest $serviceRequest): void
+    {
+        $user = $request->user();
+
+        if (
+            !in_array($user->role, ['client', 'requester', 'user'], true) ||
+            $serviceRequest->user_id !== $user->id
+        ) {
+            abort(403);
+        }
     }
 }

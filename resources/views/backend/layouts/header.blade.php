@@ -8,7 +8,14 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Admin - @yield('title')</title>
+    @php
+        $roleLabel = match (auth()->user()?->role) {
+            'admin' => 'Admin',
+            'service_staff' => 'Staff',
+            default => 'Client',
+        };
+    @endphp
+    <title>{{ $roleLabel }} - @yield('title')</title>
 
     <meta name="description" content="" />
 
@@ -68,8 +75,45 @@
             gap: 0.75rem;
         }
 
+        .table-responsive {
+            border: 1px solid #e9edf5;
+            border-radius: 0.9rem;
+            background: #ffffff;
+        }
+
         .app-table {
             min-width: 720px;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .app-table thead th {
+            font-size: 0.73rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #6c7890;
+            background: #f8f9ff;
+            border-top: 0;
+            border-bottom: 1px solid #e9edf5;
+            padding: 0.9rem 0.95rem;
+            white-space: nowrap;
+        }
+
+        .app-table tbody td {
+            padding: 0.9rem 0.95rem;
+            border-color: #edf1f7;
+            color: #566277;
+            vertical-align: middle;
+        }
+
+        .app-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .app-table tbody tr:last-child td {
+            border-bottom: 0;
         }
 
         .app-badge-stack {

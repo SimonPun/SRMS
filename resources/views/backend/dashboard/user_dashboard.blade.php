@@ -5,26 +5,6 @@
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="row">
-            <div class="col-12 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
-                            <div>
-                                <h4 class="text-primary mb-1 app-page-heading">My Dashboard</h4>
-                                <p class="mb-0">
-                                    Welcome {{ $user->name }}. Submit a service request, track progress, and review recent updates.
-                                </p>
-                            </div>
-                            <div class="app-card-actions">
-                                <a href="{{ route('requests.index') }}" class="btn btn-primary">
-                                    Open My Requests
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-md-6 col-xl-3 mb-4">
                 <div class="card">
                     <div class="card-body">

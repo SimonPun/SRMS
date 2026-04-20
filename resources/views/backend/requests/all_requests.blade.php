@@ -70,7 +70,7 @@
 
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered app-table">
+                    <table class="table app-table align-middle">
                         <thead>
                             <tr>
                                 <th>#</th>

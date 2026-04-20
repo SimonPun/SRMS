@@ -233,9 +233,21 @@ class AdminAuthController extends Controller
     }
 
     // Manage Users
-    public function manageUsers()
+    public function manageUsers(Request $request)
     {
-        $users = User::orderBy('name')->get();
+        $users = User::query()
+            ->when($request->filled('role'), function ($query) use ($request) {
+                if ($request->role === 'client') {
+                    $query->whereIn('role', ['client', 'requester', 'user']);
+                    return;
+                }
+
+                if ($request->role === 'service_staff') {
+                    $query->where('role', 'service_staff');
+                }
+            })
+            ->orderBy('name')
+            ->get();
 
         return view('backend.users.index', compact('users'));
     }

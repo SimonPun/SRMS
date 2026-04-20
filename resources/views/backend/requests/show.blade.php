@@ -3,7 +3,49 @@
 @section('title', 'Request Details')
 
 @section('content')
+    @php
+        $backRoute = match (auth()->user()->role) {
+            'admin' => route('admin.requests'),
+            'service_staff' => route('staff.requests'),
+            default => route('requests.index'),
+        };
+    @endphp
+    <style>
+        .request-actions-body {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .request-action-block {
+            border: 1px solid #e8edf6;
+            border-radius: 0.9rem;
+            padding: 1rem;
+            background: #fbfcff;
+        }
+
+        .request-action-title {
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #6b7a90;
+            margin-bottom: 0.75rem;
+        }
+
+        .request-action-note {
+            font-size: 0.88rem;
+            color: #8793a6;
+            margin-bottom: 0.75rem;
+        }
+    </style>
     <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="mb-3">
+            <a href="{{ $backRoute }}" class="btn btn-outline-secondary">
+                <i class="bx bx-left-arrow-alt me-1"></i>
+                Back
+            </a>
+        </div>
+
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -74,23 +116,25 @@
                     <div class="card-header">
                         <h5 class="mb-0">Actions</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body request-actions-body">
                         @if (auth()->user()->role === 'admin')
-                            <form method="POST" action="{{ route('admin.requests.assign', $serviceRequest) }}" class="mb-4">
-                                @csrf
-                                <label class="form-label">Assign Staff (Multi Select)</label>
-                                <div class="small text-muted mb-2">Hold Ctrl (or Cmd on Mac) to select multiple staff.</div>
-                                <div class="d-grid gap-2">
-                                    <select name="user_ids[]" class="form-select" multiple size="6" required>
-                                        @foreach ($users as $staffMember)
-                                            <option value="{{ $staffMember->id }}" @selected($serviceRequest->assignedStaff->contains('id', $staffMember->id))>
-                                                {{ $staffMember->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button class="btn btn-outline-primary" type="submit">Save Assignment</button>
-                                </div>
-                            </form>
+                            <div class="request-action-block">
+                                <form method="POST" action="{{ route('admin.requests.assign', $serviceRequest) }}">
+                                    @csrf
+                                    <div class="request-action-title">Assign Staff</div>
+                                    <div class="request-action-note">Hold Ctrl (or Cmd on Mac) to select multiple staff.</div>
+                                    <div class="d-grid gap-2">
+                                        <select name="user_ids[]" class="form-select" multiple size="6" required>
+                                            @foreach ($users as $staffMember)
+                                                <option value="{{ $staffMember->id }}" @selected($serviceRequest->assignedStaff->contains('id', $staffMember->id))>
+                                                    {{ $staffMember->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button class="btn btn-primary w-100" type="submit">Save Assignment</button>
+                                    </div>
+                                </form>
+                            </div>
                         @endif
 
                         @if (in_array(auth()->user()->role, ['admin', 'service_staff'], true))
@@ -101,29 +145,29 @@
                                     ? ($myAssignment?->pivot?->staff_status ?? 'pending')
                                     : $serviceRequest->status;
                             @endphp
-                            <form method="POST"
-                                action="{{ auth()->user()->role === 'admin' ? route('admin.requests.status', $serviceRequest) : route('staff.requests.status', $serviceRequest) }}">
-                                @csrf
-                                @method('PATCH')
-                                <div class="mb-3">
-                                    <label class="form-label">
+                            <div class="request-action-block">
+                                <form method="POST"
+                                    action="{{ auth()->user()->role === 'admin' ? route('admin.requests.status', $serviceRequest) : route('staff.requests.status', $serviceRequest) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="request-action-title">
                                         {{ $isStaffUser ? 'Update My Status' : 'Update Overall Status' }}
-                                    </label>
-                                    <select name="status" class="form-select" required>
-                                        <option value="pending" @selected($selectedStatus === 'pending')>Pending</option>
-                                        <option value="in_progress" @selected($selectedStatus === 'in_progress')>In Progress</option>
-                                        <option value="completed" @selected($selectedStatus === 'completed')>Completed</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Progress Note</label>
-                                    <textarea name="note" class="form-control" rows="4"
-                                        placeholder="Add an update for the client or admin team"></textarea>
-                                </div>
-                                <div class="app-form-actions">
-                                    <button class="btn btn-primary" type="submit">Save Update</button>
-                                </div>
-                            </form>
+                                    </div>
+                                    <div class="mb-3">
+                                        <select name="status" class="form-select" required>
+                                            <option value="pending" @selected($selectedStatus === 'pending')>Pending</option>
+                                            <option value="in_progress" @selected($selectedStatus === 'in_progress')>In Progress</option>
+                                            <option value="completed" @selected($selectedStatus === 'completed')>Completed</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Progress Note</label>
+                                        <textarea name="note" class="form-control" rows="4"
+                                            placeholder="Add an update for the client or admin team"></textarea>
+                                    </div>
+                                    <button class="btn btn-primary w-100" type="submit">Save Update</button>
+                                </form>
+                            </div>
                         @endif
                     </div>
                 </div>

@@ -16,6 +16,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="card">
             <div class="card-header">
@@ -56,7 +61,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered app-table">
+                    <table class="table app-table align-middle">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -67,6 +72,7 @@
                                 <th>Assigned To</th>
                                 <th>Location</th>
                                 <th>Created At</th>
+                                <th>Actions</th>
                                 <th>View</th>
                             </tr>
                         </thead>
@@ -117,12 +123,23 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('requests.edit', $request) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                            <form method="POST" action="{{ route('requests.destroy', $request) }}"
+                                                onsubmit="return confirm('Delete this request? This cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>
                                         <a href="{{ route('requests.show', $request) }}" class="btn btn-sm btn-outline-primary">View</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="9" class="text-center">
+                                    <td colspan="10" class="text-center">
                                         No requests found.
                                     </td>
                                 </tr>

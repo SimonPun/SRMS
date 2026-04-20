@@ -23,8 +23,25 @@
             </div>
 
             <div class="card-body">
+                @php
+                    $roleFilter = request('role');
+                @endphp
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <a href="{{ route('admin.manage-users', ['role' => 'client']) }}"
+                        class="btn {{ $roleFilter === 'client' ? 'btn-primary' : 'btn-outline-primary' }}">
+                        Client
+                    </a>
+                    <a href="{{ route('admin.manage-users', ['role' => 'service_staff']) }}"
+                        class="btn {{ $roleFilter === 'service_staff' ? 'btn-primary' : 'btn-outline-primary' }}">
+                        Staff
+                    </a>
+                    <a href="{{ route('admin.manage-users') }}" class="btn btn-outline-secondary">
+                        Reset
+                    </a>
+                </div>
+
                 <div class="table-responsive">
-                    <table class="table table-bordered app-table">
+                    <table class="table app-table align-middle">
                         <thead>
                             <tr>
                                 <th>Name</th>

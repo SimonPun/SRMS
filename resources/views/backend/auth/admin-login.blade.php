@@ -39,10 +39,6 @@
             min-width: 48px;
         }
 
-        .auth-demo-card .small div + div {
-            margin-top: 0.35rem;
-        }
-
         @media (max-width: 575.98px) {
             .authentication-wrapper.authentication-basic {
                 padding-top: 1rem;
@@ -67,14 +63,6 @@
                 font-size: 0.95rem;
             }
 
-            .auth-demo-card .card-body {
-                padding: 1rem;
-            }
-
-            .auth-demo-card .small {
-                font-size: 0.82rem;
-                line-height: 1.45;
-            }
         }
     </style>
 </head>
@@ -134,17 +122,6 @@
 
                             <button class="btn btn-dark w-100">Sign In</button>
                         </form>
-
-                        <div class="card bg-label-primary mt-4 border-0 auth-demo-card">
-                            <div class="card-body">
-                                <h6 class="mb-2 text-primary">Demo Accounts:</h6>
-                                <div class="small">
-                                    <div><strong>Admin:</strong> admin@example.com / password123</div>
-                                    <div><strong>Staff:</strong> staff@example.com / password123</div>
-                                    <div><strong>Client:</strong> client@example.com / password123</div>
-                                </div>
-                            </div>
-                        </div>
 
                         <p class="text-center mt-4 mb-0">
                             Don't have an account?

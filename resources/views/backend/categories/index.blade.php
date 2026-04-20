@@ -37,7 +37,7 @@
                 </form>
 
                 <div class="table-responsive">
-                    <table class="table table-bordered app-table mb-0">
+                    <table class="table app-table align-middle mb-0">
                         <thead>
                             <tr>
                                 <th>#</th>

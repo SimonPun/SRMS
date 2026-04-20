@@ -157,6 +157,15 @@ Route::middleware(['custom.auth', 'role:client'])->group(function () {
     Route::get('/requests/create', [ServiceRequestController::class, 'create'])
         ->name('requests.create');
 
+    Route::get('/requests/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])
+        ->name('requests.edit');
+
+    Route::patch('/requests/{serviceRequest}', [ServiceRequestController::class, 'update'])
+        ->name('requests.update');
+
+    Route::delete('/requests/{serviceRequest}', [ServiceRequestController::class, 'destroy'])
+        ->name('requests.destroy');
+
     Route::get('/requests/{serviceRequest}', [ServiceRequestController::class, 'show'])
         ->name('requests.show');
 
