@@ -89,7 +89,3 @@ Current suite verifies:
 - multi-staff status behavior,
 - notification read/delete behavior,
 - profile update flow.
-
-## Assignment Readiness
-
-Use [`ASSIGNMENT_CHECKLIST.md`](/Users/simonmagar/Documents/mastersproject/SRMS/ASSIGNMENT_CHECKLIST.md) before submission/demo.
